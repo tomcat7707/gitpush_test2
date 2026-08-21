@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>지리산 하동 감말랭이 — Farmer's Autumn Journal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Nanum+Pen+Script&family=Noto+Serif+KR:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ================================================================
+       지리산 하동 감말랭이 — Farmer's Autumn Journal (v6.3 작업일지 감성 개편)
+       - 딱딱한 표/박스 목록을 걷어내고 따뜻한 아날로그 타임라인 저널로 전면 리디자인
+       - 부드러운 손글씨 캡션, 따뜻한 엠블럼, 정성 어린 스토리텔링 어투
+       ================================================================ */
+    :root {
+      --c-orange: #d95d00;
+      --c-orange-soft: #fbf1e6;
+      --c-orange-glow: #e66e10;
+      --c-brown: #38200d;
+      --c-brown-light: #5f3e23;
+      --c-gold: #be924d;
+      --c-charcoal: #2a241f;
+      --c-text-body: #4c453e;
+      --c-text-muted: #887d73;
+      
+      --bg-canvas: #fbf8f3;
+      --bg-hanji: #f5ede2;
+      --bg-white: #ffffff;
+      --bg-kraft: #ede2d1;
+      --border-soft: #e8dbcc;
+      --tape-color: rgba(245, 235, 220, 0.92);
+      
+      --font-title: 'Black Han Sans', sans-serif;
+      --font-serif: 'Noto Serif KR', serif;
+      --font-body: 'Noto Sans KR', sans-serif;
+      --font-hand: 'Nanum Pen Script', cursive;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #3a332d;
+      font-family: var(--font-body);
+      color: var(--c-charcoal);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.75;
+      letter-spacing: -0.3px;
+    }
+
+    /* 상단 컨트롤 바 */
+    .vbar {
+      position: sticky; top: 0; z-index: 999;
+      background: #1a1614; text-align: center; padding: 10px 0;
+      border-bottom: 1px solid #2d2621;
+    }
+    .vbar button {
+      background: #2d2621; border: none; color: #d5cbc2;
+      padding: 6px 18px; font-size: 13px; font-weight: 500;
+      cursor: pointer; margin: 0 3px; border-radius: 4px;
+      font-family: var(--font-body);
+    }
+    .vbar button.on { background: var(--c-orange); color: #fff; font-weight: 700; }
+
+    /* 메인 롱폼 컨테이너 */
+    .pg {
+      max-width: 860px;
+      margin: 0 auto;
+      background: var(--bg-canvas);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 60px rgba(0,0,0,0.5);
+    }
+    .pg.wide { max-width: 1080px; }
+
+    /* 이미지 필름 웜톤 필터 */
+    img {
+      width: 100%; display: block; object-fit: cover;
+      filter: saturate(1.05) contrast(0.98) brightness(1.02);
+    }
+    
+    .f-title { font-family: var(--font-title); font-weight: 400; }
+    .f-serif { font-family: var(--font-serif); }
+    .f-hand { font-family: var(--font-hand); }
+    .c-orange { color: var(--c-orange); }
+    .c-gold { color: var(--c-gold); }
+    .c-brown { color: var(--c-brown); }
+    .text-center { text-align: center; }
+
+    /* 손으로 찢은 마스킹 테이프 오브젝트 */
+    .masking-tape {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-1.5deg);
+      width: 110px;
+      height: 28px;
+      background: linear-gradient(135deg, rgba(245, 235, 220, 0.95) 0%, rgba(230, 215, 195, 0.88) 100%);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+      z-index: 10;
+      opacity: 0.95;
+      backdrop-filter: blur(2px);
+      clip-path: polygon(
+        0% 0%, 4% 15%, 0% 30%, 5% 45%, 0% 60%, 4% 75%, 0% 90%, 3% 100%,
+        97% 100%, 100% 85%, 96% 70%, 100% 55%, 95% 40%, 100% 25%, 96% 10%, 100% 0%
+      );
+    }
+    .masking-tape.tilt-left { transform: translateX(-50%) rotate(-3.5deg); }
+    .masking-tape.tilt-right { transform: translateX(-50%) rotate(3deg); }
+    .masking-tape.corner-right {
+      top: -10px; right: 20px; left: auto; transform: rotate(12deg); width: 80px; height: 24px;
+    }
+    .masking-tape.corner-left {
+      top: -10px; left: 20px; transform: rotate(-12deg); width: 80px; height: 24px;
+    }
+
+    /* 촬영/날짜 스탬프 */
+    .photo-date-stamp {
+      font-family: var(--font-serif); font-size: 11.5px;
+      letter-spacing: 2px; color: var(--c-gold);
+      text-transform: uppercase; font-weight: 600;
+      margin-bottom: 6px; display: inline-block;
+    }
+    .camera-note {
+      font-size: 11px; color: var(--c-text-muted);
+      font-family: monospace; letter-spacing: 0.5px;
+    }
+
+    /* 손글씨 한 줄 메모 배너 */
+    .hand-memo-line {
+      font-family: var(--font-hand); font-size: 28px;
+      color: var(--c-orange); line-height: 1.3;
+      text-align: center; margin: 18px 0;
+    }
+
+    /* 매거진 섹션 기본 여백 */
+    .sec { padding: 96px 48px; position: relative; }
+    .sec.hanji { background: var(--bg-hanji); }
+    .sec.white { background: #ffffff; }
+
+    .journal-header {
+      text-align: center; margin-bottom: 44px;
+    }
+    .journal-vol {
+      font-family: var(--font-serif); font-size: 12.5px;
+      font-weight: 600; color: var(--c-gold); letter-spacing: 3px;
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+    .journal-tit {
+      font-size: 40px; line-height: 1.3;
+      color: var(--c-charcoal); letter-spacing: -1px;
+      margin-bottom: 14px;
+    }
+    .journal-sub {
+      font-family: var(--font-serif); font-size: 17px;
+      color: var(--c-text-muted); line-height: 1.7; font-weight: 400;
+    }
+
+    /* ─── 01. COVER & HERO ─── */
+    .cover-top {
+      padding: 20px 40px 16px; text-align: center;
+      border-bottom: 1px solid var(--border-soft);
+      background: #fff;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .cover-brand {
+      font-family: var(--font-serif); font-size: 13px;
+      letter-spacing: 4px; color: var(--c-brown); font-weight: 700;
+    }
+    .cover-issue {
+      font-family: var(--font-serif); font-size: 11px;
+      letter-spacing: 1.5px; color: var(--c-text-muted);
+    }
+    
+    .hero-photo-wrap {
+      position: relative; background: #1a1614;
+    }
+    .hero-photo-wrap img { width: 100%; display: block; min-height: 580px; }
+    .hero-top-overlay {
+      position: absolute; top: 0; left: 0; right: 0;
+      padding: 36px 30px 60px; text-align: center;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 100%);
+      color: #fff;
+    }
+    .hero-badge-pill {
+      display: inline-block; background: var(--c-orange); color: #fff;
+      font-size: 12px; font-weight: 900; letter-spacing: 2px;
+      padding: 4px 16px; margin-bottom: 10px; border-radius: 20px;
+    }
+    .hero-top-quote {
+      font-family: var(--font-serif); font-size: 21px; color: #fff;
+      font-weight: 600; text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
+
+    .hero-editorial-card {
+      background: #fff; padding: 46px 40px 36px; text-align: center;
+      border-bottom: 1px solid var(--border-soft); position: relative;
+    }
+    .hero-main-tit {
+      font-size: 46px; color: var(--c-charcoal); line-height: 1.15;
+      letter-spacing: -1.5px; margin-bottom: 12px;
+    }
+    .hero-sub-txt {
+      font-family: var(--font-serif); font-size: 17px;
+      color: var(--c-text-body); font-weight: 500;
+    }
+    .hero-tags {
+      display: flex; justify-content: center; gap: 16px;
+      margin-top: 20px; padding-top: 18px;
+      border-top: 1px solid var(--border-soft);
+      font-size: 13px; font-weight: 700; color: var(--c-gold);
+      letter-spacing: 1px;
+    }
+
+    .essay-strip {
+      padding: 54px 36px; text-align: center;
+      background: var(--bg-hanji); border-bottom: 1px solid var(--border-soft);
+    }
+    .essay-txt {
+      font-family: var(--font-serif); font-size: 23px;
+      color: var(--c-brown); line-height: 1.65; font-weight: 400;
+    }
+    .essay-author {
+      font-size: 14px; color: var(--c-text-muted);
+      margin-top: 10px; letter-spacing: 2px;
+    }
+
+    /* ─── 02. WHY HADONG (4컷 포토 다이어리) ─── */
+    .why-journal-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    }
+    .why-journal-card {
+      background: #fff; border-radius: 8px;
+      border: 1px solid var(--border-soft);
+      overflow: hidden; display: flex; flex-direction: column;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      position: relative;
+    }
+    .why-journal-img {
+      position: relative; aspect-ratio: 16/10; overflow: hidden;
+    }
+    .why-journal-img img { height: 100%; object-fit: cover; }
+    .why-stamp-tag {
+      position: absolute; top: 12px; left: 12px;
+      background: rgba(43, 37, 32, 0.85); color: #fff;
+      font-family: var(--font-serif); font-size: 11px; font-weight: 700;
+      padding: 3px 10px; letter-spacing: 1px; border-radius: 3px;
+      backdrop-filter: blur(3px);
+    }
+    .why-journal-body {
+      padding: 24px 20px 20px; flex: 1; display: flex; flex-direction: column;
+    }
+    .why-journal-tit {
+      font-size: 19px; font-weight: 900; color: var(--c-brown);
+      margin-bottom: 6px;
+    }
+    .why-journal-desc {
+      font-size: 14px; color: var(--c-text-body); line-height: 1.65; margin-bottom: 12px;
+    }
+
+    /* ─── 03. TRUST SECTION ─── */
+    .trust-paper-wrap { margin: 10px 0 34px; position: relative; }
+    .trust-letter-card {
+      background: #fff; border-radius: 12px;
+      padding: 38px 36px 30px;
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 8px 30px rgba(59, 32, 12, 0.05);
+      position: relative;
+    }
+    .trust-letter-stamp-area {
+      display: flex; justify-content: center; gap: 36px; margin-bottom: 22px;
+      padding-bottom: 22px; border-bottom: 1px dashed var(--border-soft);
+    }
+    .trust-seal-item { display: flex; align-items: center; gap: 14px; }
+    .seal-badge {
+      width: 58px; height: 58px; border-radius: 50%;
+      border: 2px dashed #b33927; color: #b33927;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-family: var(--font-serif); font-size: 11px; font-weight: 900;
+      line-height: 1.2; text-align: center; transform: rotate(-4deg);
+      background: #fffbfa; flex-shrink: 0;
+    }
+    .seal-badge.green {
+      border-color: #2e7336; color: #2e7336; background: #f7faf7; transform: rotate(3deg);
+    }
+    .seal-info h4 { font-size: 17px; font-weight: 900; color: var(--c-brown); margin-bottom: 2px; }
+    .seal-info p { font-size: 13px; color: var(--c-text-muted); }
+    .trust-letter-body {
+      font-family: var(--font-serif); font-size: 15.5px;
+      color: var(--c-text-body); line-height: 1.8; text-align: center;
+    }
+    .trust-letter-body strong { color: var(--c-brown); font-weight: 700; }
+
+    .fact-warm-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 14px; margin-top: 24px;
+    }
+    .fact-warm-box {
+      background: #fff; border-radius: 10px;
+      border: 1px solid var(--border-soft);
+      padding: 24px 10px; text-align: center;
+    }
+    .fact-w-icon {
+      font-size: 12px; color: var(--c-gold); font-family: var(--font-serif);
+      font-weight: 700; margin-bottom: 6px; letter-spacing: 1px;
+    }
+    .fact-w-val {
+      font-size: 34px; font-weight: 900; color: var(--c-brown);
+      font-family: var(--font-title); line-height: 1;
+    }
+    .fact-w-val span { font-size: 15px; color: var(--c-orange); font-family: var(--font-body); }
+    .fact-w-desc { font-size: 12.5px; color: var(--c-text-muted); margin-top: 6px; }
+
+    /* ─── 04. PRICE & HAND JOURNEY ─── */
+    .story-journey-wrap { margin-top: 24px; }
+    .story-card-track {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;
+      margin-bottom: 24px;
+    }
+    .story-step-card {
+      background: #fff; border-radius: 8px;
+      border: 1px solid var(--border-soft);
+      padding: 18px 10px 16px; text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+      position: relative;
+    }
+    .story-step-card.final {
+      background: var(--c-orange-soft); border-color: var(--c-orange);
+    }
+    .story-step-no {
+      font-family: var(--font-serif); font-size: 11px; font-weight: 700;
+      color: var(--c-gold); margin-bottom: 6px;
+    }
+    .story-step-card.final .story-step-no { color: var(--c-orange); font-weight: 900; }
+    .story-step-tit {
+      font-size: 15px; font-weight: 900; color: var(--c-brown); margin-bottom: 4px;
+    }
+    .story-step-txt {
+      font-size: 12px; color: var(--c-text-muted); line-height: 1.45;
+    }
+    .journey-hand-quote {
+      background: var(--bg-hanji); border-radius: 12px;
+      padding: 24px 30px; text-align: center;
+      border: 1px dashed var(--border-soft);
+    }
+    .journey-hand-quote .txt {
+      font-family: var(--font-hand); font-size: 28px; color: var(--c-brown);
+      line-height: 1.4;
+    }
+
+    /* ─── 05. VISUAL COMPARISON ─── */
+    .compare-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+      margin-top: 28px;
+    }
+    .compare-card {
+      background: #fff; border-radius: 10px;
+      border: 1px solid var(--border-soft);
+      padding: 22px; display: flex; flex-direction: column;
+    }
+    .compare-card.ours {
+      border: 2px solid var(--c-orange); background: #fffdfa;
+    }
+    .compare-tag {
+      font-family: var(--font-serif); font-size: 12px; font-weight: 700;
+      color: var(--c-text-muted); margin-bottom: 6px;
+    }
+    .compare-card.ours .compare-tag { color: var(--c-orange); }
+    .compare-tit {
+      font-size: 19px; font-weight: 900; color: var(--c-brown); margin-bottom: 12px;
+    }
+    .compare-img {
+      aspect-ratio: 16/10; overflow: hidden; margin-bottom: 14px;
+      border-radius: 6px; border: 1px solid var(--border-soft);
+    }
+    .compare-img img { height: 100%; object-fit: cover; }
+    .compare-points {
+      list-style: none; display: flex; flex-direction: column; gap: 8px;
+      font-size: 13.5px; color: var(--c-text-body);
+    }
+    .compare-points li { display: flex; gap: 8px; align-items: baseline; }
+    .compare-points li span { font-weight: 700; color: var(--c-brown); }
+
+    /* ─── 06. 48-DAY JOURNEY ─── */
+    .diary-journey-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 12px; margin-top: 30px;
+    }
+    .diary-polaroid-item {
+      background: #fff; border-radius: 8px;
+      border: 1px solid var(--border-soft);
+      padding: 16px 12px 18px; text-align: center;
+      display: flex; flex-direction: column; justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03); position: relative;
+    }
+    .diary-polaroid-item.highlight {
+      border: 2px solid var(--c-orange); background: #fffbf7;
+    }
+    .diary-tone-pill {
+      font-family: var(--font-serif); font-size: 11px;
+      font-weight: 700; color: #fff; background: var(--c-brown);
+      padding: 3px 8px; border-radius: 12px; display: inline-block;
+      margin: 0 auto 10px;
+    }
+    .diary-polaroid-item.highlight .diary-tone-pill { background: var(--c-orange); }
+    .diary-tone-circle {
+      width: 44px; height: 44px; border-radius: 50%;
+      margin: 0 auto 10px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.15);
+      border: 2px solid #fff;
+    }
+    .tone-1 { background: radial-gradient(circle, #f8a145, #df6200); }
+    .tone-2 { background: radial-gradient(circle, #df6200, #b84c00); }
+    .tone-3 { background: radial-gradient(circle, #b84c00, #7a3200); }
+    .tone-4 { background: radial-gradient(circle, #7a3200, #542200); }
+    .tone-5 { background: radial-gradient(circle, #ffeed6, #b85400); border: 2px solid #df6200; }
+
+    .diary-stage-tit {
+      font-size: 14.5px; font-weight: 900; color: var(--c-brown); margin-bottom: 4px;
+    }
+    .diary-stage-desc {
+      font-size: 12px; color: var(--c-text-body); line-height: 1.5;
+    }
+
+    /* ─── 07. PRODUCER LETTER ─── */
+    .letter-frame {
+      background: #fff; border-radius: 12px;
+      border: 1px solid var(--border-soft);
+      padding: 44px 38px; display: grid; grid-template-columns: 1fr 1.3fr;
+      gap: 32px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      position: relative;
+    }
+    .letter-photo {
+      border: 6px solid #fff; border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08); overflow: hidden; position: relative;
+    }
+    .letter-tag {
+      font-family: var(--font-serif); font-size: 13px;
+      color: var(--c-gold); letter-spacing: 2px; margin-bottom: 6px;
+    }
+    .letter-author-name {
+      font-size: 28px; font-weight: 900; color: var(--c-brown); margin-bottom: 14px;
+    }
+    .letter-p {
+      font-size: 14.5px; color: var(--c-text-body); line-height: 1.8; margin-bottom: 18px;
+    }
+    .letter-handwriting {
+      font-family: var(--font-hand); font-size: 26px;
+      color: var(--c-charcoal); line-height: 1.4;
+      border-top: 1px dashed var(--border-soft); padding-top: 14px;
+    }
+    .letter-stamp {
+      display: inline-block; border: 2px solid #b33927;
+      color: #b33927; font-family: var(--font-serif);
+      font-size: 12px; font-weight: 700; padding: 2px 8px;
+      border-radius: 3px; transform: rotate(-5deg); margin-top: 8px;
+    }
+
+    /* ─── 08. [전면 개편] WORK JOURNAL (아날로그 타임라인 다이어리) ─── */
+    .process-timeline-wrap {
+      position: relative; margin-top: 36px; padding-left: 20px;
+    }
+    .process-timeline-wrap::before {
+      content: ''; position: absolute; top: 15px; bottom: 30px; left: 47px;
+      width: 2px; background: repeating-linear-gradient(to bottom, var(--c-gold) 0, var(--c-gold) 6px, transparent 6px, transparent 12px);
+    }
+    .timeline-entry {
+      display: flex; gap: 28px; margin-bottom: 30px; position: relative;
+    }
+    .timeline-node {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #fff; border: 2px solid var(--c-orange);
+      box-shadow: 0 4px 12px rgba(217, 93, 0, 0.15);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      flex-shrink: 0; z-index: 2;
+    }
+    .node-num {
+      font-family: var(--font-title); font-size: 18px; color: var(--c-orange); line-height: 1;
+    }
+    .node-sub {
+      font-size: 9.5px; font-weight: 700; color: var(--c-brown); font-family: var(--font-serif);
+    }
+    .timeline-body-card {
+      flex: 1; background: #fff; border-radius: 12px;
+      border: 1px solid var(--border-soft);
+      padding: 24px 28px 20px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+      position: relative;
+    }
+    .timeline-header-row {
+      display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;
+    }
+    .timeline-step-title {
+      font-size: 18px; font-weight: 900; color: var(--c-brown); letter-spacing: -0.5px;
+    }
+    .timeline-stage-tag {
+      font-family: var(--font-serif); font-size: 11.5px; font-weight: 700;
+      color: var(--c-gold); letter-spacing: 1px;
+    }
+    .timeline-step-desc {
+      font-size: 14.5px; color: var(--c-text-body); line-height: 1.7;
+    }
+    .timeline-hand-memo {
+      font-family: var(--font-hand); font-size: 22px; color: var(--c-orange);
+      margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--border-soft);
+      display: block;
+    }
+
+    /* ─── 09. TEXTURE & POLAROID STACK ─── */
+    .texture-editorial-wrap {
+      position: relative; margin-top: 24px;
+    }
+    .texture-main-pic {
+      border-radius: 10px; overflow: hidden; border: 1px solid var(--border-soft);
+      position: relative;
+    }
+    .texture-main-pic img { min-height: 480px; max-height: 520px; }
+    .texture-quote-bar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(35,31,28,0.92) 0%, transparent 100%);
+      color: #fff; padding: 50px 36px 26px; text-align: center;
+    }
+    .texture-main-phrase {
+      font-size: 36px; font-family: var(--font-title); letter-spacing: -1px; margin-bottom: 6px;
+    }
+    .texture-sub-phrase {
+      font-family: var(--font-serif); font-size: 16px; color: var(--c-gold); font-weight: 400;
+    }
+
+    .texture-polaroids-stack {
+      display: flex; gap: 16px; justify-content: flex-end;
+      margin-top: -30px; position: relative; z-index: 10; padding-right: 20px;
+    }
+    .tex-stack-card {
+      width: 140px; background: #fff; border-radius: 4px;
+      padding: 6px 6px 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      border: 1px solid var(--border-soft); text-align: center;
+      position: relative;
+    }
+    .tex-stack-card.card-1 { transform: rotate(-4deg); }
+    .tex-stack-card.card-2 { transform: rotate(3deg); margin-top: 10px; }
+    .tex-stack-card img { aspect-ratio: 1/1; border-radius: 2px; margin-bottom: 6px; }
+    .tex-stack-cap {
+      font-family: var(--font-hand); font-size: 18px; color: var(--c-brown);
+    }
+
+    .tex-memo-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 24px;
+    }
+    .tex-memo-card {
+      background: #fff; border-radius: 8px;
+      border: 1px solid var(--border-soft); padding: 20px 18px;
+    }
+    .tex-memo-tit {
+      font-size: 15.5px; font-weight: 900; color: var(--c-brown);
+      margin-bottom: 4px; display: flex; align-items: center; gap: 6px;
+    }
+    .tex-memo-tit::before {
+      content: ''; width: 4px; height: 14px; background: var(--c-orange); display: inline-block;
+    }
+    .tex-memo-txt { font-size: 13px; color: var(--c-text-body); line-height: 1.6; }
+
+    /* ─── 10. HONEST NOTE ─── */
+    .honest-kraft-card {
+      background: #fff; border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      padding: 40px 34px; position: relative;
+      box-shadow: 0 10px 30px rgba(59, 32, 12, 0.04);
+    }
+    .honest-kraft-head {
+      text-align: center; margin-bottom: 26px;
+    }
+    .honest-kraft-tit {
+      font-family: var(--font-serif); font-size: 26px; font-weight: 700;
+      color: var(--c-brown); margin-bottom: 6px;
+    }
+    .honest-kraft-sub {
+      font-family: var(--font-hand); font-size: 22px; color: var(--c-orange);
+    }
+    .honest-story-list {
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .honest-story-item {
+      background: var(--bg-hanji); border-radius: 10px;
+      padding: 20px 22px;
+    }
+    .honest-item-q {
+      font-family: var(--font-serif); font-size: 16px;
+      font-weight: 900; color: var(--c-brown); margin-bottom: 6px;
+    }
+    .honest-item-a {
+      font-size: 13.5px; color: var(--c-text-body); line-height: 1.6;
+    }
+    .honest-item-hand {
+      font-family: var(--font-hand); font-size: 21px;
+      color: var(--c-orange); margin-top: 4px; display: block;
+    }
+
+    /* ─── 11. LIFESTYLE ─── */
+    .life-photo-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 30px;
+    }
+    .life-polaroid {
+      background: #fff; border-radius: 6px;
+      border: 1px solid var(--border-soft);
+      padding: 12px 10px 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); text-align: center;
+      position: relative;
+    }
+    .life-polaroid-img {
+      aspect-ratio: 1/1; overflow: hidden; margin-bottom: 8px; border-radius: 4px;
+    }
+    .life-polaroid-img img { height: 100%; object-fit: cover; }
+    .life-polaroid-caption {
+      font-family: var(--font-serif); font-size: 13.5px; font-weight: 600; color: var(--c-brown);
+    }
+
+    /* ─── 12. REVIEWS ─── */
+    .reviews-journal-list {
+      display: flex; flex-direction: column; gap: 18px; margin-top: 26px;
+    }
+    .review-paper-card {
+      background: #fff; border-radius: 10px;
+      border: 1px solid var(--border-soft);
+      padding: 24px 26px; display: flex; gap: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    }
+    .review-paper-img {
+      width: 100px; height: 100px; flex-shrink: 0;
+      border-radius: 6px; border: 1px solid var(--border-soft); overflow: hidden;
+    }
+    .review-paper-img img { height: 100%; object-fit: cover; }
+    .review-paper-content { flex: 1; }
+    .review-paper-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;
+    }
+    .review-stars-gold { color: #f5a623; font-size: 14px; letter-spacing: 2px; }
+    .review-badge-soft {
+      font-size: 11px; font-weight: 700; color: var(--c-orange);
+      background: var(--c-orange-soft); padding: 2px 8px; border-radius: 3px;
+    }
+    .review-paper-quote {
+      font-size: 14.5px; color: var(--c-charcoal); line-height: 1.65;
+      margin-bottom: 8px; font-weight: 500;
+    }
+    .review-paper-meta {
+      font-size: 12.5px; color: var(--c-text-muted); font-family: var(--font-serif);
+    }
+
+    /* ─── 13. OPTION GUIDE ─── */
+    .opt-journal-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 30px;
+    }
+    .opt-journal-card {
+      background: #fff; border-radius: 10px;
+      border: 1px solid var(--border-soft);
+      padding: 32px 16px; text-align: center; position: relative;
+    }
+    .opt-journal-card.best {
+      border: 2px solid var(--c-orange);
+      box-shadow: 0 8px 24px rgba(223, 98, 0, 0.08);
+    }
+    .opt-j-badge {
+      position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+      font-family: var(--font-serif); font-size: 11px; font-weight: 700;
+      padding: 3px 12px; color: #fff; background: var(--c-brown);
+      letter-spacing: 1px; border-radius: 10px;
+    }
+    .opt-journal-card.best .opt-j-badge { background: var(--c-orange); }
+    .opt-j-weight {
+      font-size: 28px; font-weight: 900; color: var(--c-charcoal);
+      font-family: var(--font-title); margin: 6px 0 4px;
+    }
+    .opt-j-title {
+      font-size: 15px; font-weight: 700; color: var(--c-brown);
+      margin-bottom: 6px; font-family: var(--font-serif);
+    }
+    .opt-j-desc { font-size: 12.5px; color: var(--c-text-body); line-height: 1.5; }
+
+    /* ─── 14. FAQ & INFO ─── */
+    .faq-journal-list { margin-top: 20px; border-top: 1px solid var(--border-soft); }
+    .faq-journal-item { padding: 18px 0; border-bottom: 1px solid var(--border-soft); }
+    .faq-j-q {
+      font-size: 16px; font-weight: 900; color: var(--c-brown);
+      margin-bottom: 4px; font-family: var(--font-serif);
+    }
+    .faq-j-a { font-size: 13.5px; color: var(--c-text-body); line-height: 1.65; }
+
+    .info-journal-table {
+      width: 100%; border-collapse: collapse; margin-top: 32px;
+      border-top: 1px solid var(--c-brown);
+    }
+    .info-journal-table th, .info-journal-table td {
+      padding: 12px 14px; border-bottom: 1px solid var(--border-soft);
+      font-size: 13px; text-align: left;
+    }
+    .info-journal-table th {
+      background: var(--bg-hanji); width: 28%; font-weight: 700;
+      color: var(--c-brown); font-family: var(--font-serif);
+    }
+    .info-journal-table td { color: var(--c-text-body); }
+
+    /* ─── 15. CLOSING LETTER & CTA ─── */
+    .closing-sec {
+      background: var(--bg-hanji); padding: 90px 40px 100px; text-align: center;
+      border-top: 1px solid var(--border-soft); position: relative;
+    }
+    .closing-letter-card {
+      max-width: 620px; margin: 0 auto; background: #fff;
+      border-radius: 14px; border: 1px solid var(--border-soft);
+      padding: 44px 34px; box-shadow: 0 10px 35px rgba(0,0,0,0.05);
+      position: relative;
+    }
+    .closing-sunset-img {
+      border-radius: 8px; overflow: hidden; margin-bottom: 24px;
+      border: 1px solid var(--border-soft); position: relative;
+    }
+    .closing-vol {
+      font-family: var(--font-serif); font-size: 12.5px;
+      letter-spacing: 3px; color: var(--c-gold); margin-bottom: 12px;
+    }
+    .closing-tit {
+      font-size: 32px; color: var(--c-charcoal); line-height: 1.3;
+      margin-bottom: 16px; letter-spacing: -1px;
+    }
+    .closing-txt {
+      font-family: var(--font-serif); font-size: 15.5px;
+      color: var(--c-text-body); line-height: 1.8; margin-bottom: 28px;
+    }
+    .btn-journal-buy {
+      display: inline-block; background: var(--c-orange); color: #fff;
+      font-size: 20px; font-weight: 900; padding: 18px 64px;
+      text-decoration: none; border-radius: 30px;
+      box-shadow: 0 10px 25px rgba(223, 98, 0, 0.3);
+      transition: all 0.25s; font-family: var(--font-title);
+    }
+    .btn-journal-buy:hover {
+      background: var(--c-brown); transform: translateY(-2px);
+    }
+    .closing-notice {
+      font-size: 12.5px; color: var(--c-text-muted); margin-top: 14px; margin-bottom: 28px;
+    }
+    .closing-sign-box {
+      border-top: 1px dashed var(--border-soft); padding-top: 20px;
+    }
+    .closing-hand {
+      font-family: var(--font-hand); font-size: 26px; color: var(--c-brown); line-height: 1.4;
+    }
+
+    /* 모바일 반응형 */
+    @media (max-width: 600px) {
+      .sec { padding: 50px 16px; }
+      .journal-tit { font-size: 28px; }
+      .journal-sub { font-size: 14.5px; }
+      .hero-editorial-card { padding: 28px 18px; }
+      .hero-main-tit { font-size: 30px; }
+      .hero-top-quote { font-size: 16px; }
+      .why-journal-grid { grid-template-columns: 1fr; gap: 14px; }
+      .trust-letter-stamp-area { flex-direction: column; gap: 16px; align-items: center; }
+      .fact-warm-grid { grid-template-columns: 1fr 1fr; }
+      .story-card-track { grid-template-columns: 1fr; gap: 8px; }
+      .compare-grid { grid-template-columns: 1fr; }
+      .diary-journey-grid { grid-template-columns: 1fr; gap: 10px; }
+      .letter-frame { grid-template-columns: 1fr; padding: 24px 16px; gap: 18px; }
+      .process-timeline-wrap { padding-left: 0; }
+      .process-timeline-wrap::before { left: 24px; }
+      .timeline-entry { gap: 14px; }
+      .timeline-node { width: 46px; height: 46px; }
+      .node-num { font-size: 15px; }
+      .timeline-body-card { padding: 18px 16px; }
+      .timeline-header-row { flex-direction: column; gap: 4px; }
+      .texture-polaroids-stack { justify-content: center; padding-right: 0; margin-top: 12px; }
+      .tex-memo-grid { grid-template-columns: 1fr; }
+      .texture-main-phrase { font-size: 25px; }
+      .honest-kraft-card { padding: 28px 16px; }
+      .life-photo-grid { grid-template-columns: 1fr 1fr; }
+      .review-paper-card { flex-direction: column; gap: 10px; padding: 16px; }
+      .review-paper-img { width: 100%; height: 140px; }
+      .opt-journal-grid { grid-template-columns: 1fr; gap: 14px; }
+      .closing-sec { padding: 48px 16px; }
+      .closing-letter-card { padding: 28px 16px; }
+      .closing-tit { font-size: 24px; }
+      .btn-journal-buy { font-size: 17px; padding: 14px 30px; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="vbar">
+  <button class="on" id="bm">모바일 에디토리얼 (860px)</button>
+  <button id="bp">PC 와이드 뷰</button>
+</div>
+
+<div class="pg" id="pg">
+
+  <!-- =====================================
+       01. COVER & HERO
+       ===================================== -->
+  <div class="cover-top">
+    <div class="cover-brand">HADONG PERSIMMON JOURNAL</div>
+    <div class="cover-issue">AUTUMN 2026 · ISSUE NO. 11</div>
+  </div>
+
+  <div class="hero-photo-wrap">
+    <img src="images/hero_persimmon.jpg" alt="지리산 하동 햇살 아래 감말랭이">
+    <div class="hero-top-overlay">
+      <div class="hero-badge-pill">지리산 하동 48일 자연건조</div>
+      <div class="hero-top-quote">"가을 햇살과 맑은 바람이 지은, 가장 순수한 단맛"</div>
+    </div>
+  </div>
+
+  <div class="hero-editorial-card">
+    <div class="photo-date-stamp">NOV 03 · MORNING SUNLIGHT</div>
+    <div class="hero-main-tit f-title">
+      지리산 하동 감말랭이
+    </div>
+    <div class="hero-sub-txt">
+      설탕 한 톨 없이 자연이 48일간 천천히 응축한 깊고 쫀득한 달콤함
+    </div>
+    <div class="hero-tags">
+      <span>#100% 하동산</span>
+      <span>#48일 자연건조</span>
+      <span>#무설탕·무첨가</span>
+      <span>#식약처 HACCP</span>
+    </div>
+  </div>
+
+  <div class="essay-strip">
+    <div class="essay-txt">
+      "우리는 감말랭이를 팔지 않습니다.<br>
+      지리산의 맑은 가을과 기다림의 온기를 전합니다."
+    </div>
+    <div class="essay-author">— 하동 농부 김형석의 다이어리 중</div>
+  </div>
+
+  <!-- =====================================
+       02. WHY HADONG (4컷 포토 다이어리)
+       ===================================== -->
+  <div class="sec white">
+    <div class="journal-header">
+      <div class="journal-vol">CHAPTER 01 · ORIGIN DIARY</div>
+      <div class="journal-tit f-title">왜 지리산 하동일까요?</div>
+      <div class="journal-sub">
+        500년 감의 고향, 자연이 빚어내는 특별한 환경의 기록
+      </div>
+      <div class="hand-memo-line">"올해는 가을 볕이 좋아 당도가 유난히 깊습니다."</div>
+    </div>
+
+    <div class="why-journal-grid">
+      <!-- 01. 큰 일교차 -->
+      <div class="why-journal-card">
+        <div class="why-journal-img">
+          <div class="masking-tape tilt-left"></div>
+          <img src="images/hadong_orchard.jpg" alt="새벽 6시 안개 낀 지리산 감 과수원">
+          <div class="why-stamp-tag">01. MORNING MIST · 06:20</div>
+        </div>
+        <div class="why-journal-body">
+          <div class="why-journal-tit">해발 500m 큰 일교차</div>
+          <div class="why-journal-desc">
+            지리산 자락의 서늘한 밤공기와 따뜻한 낮 햇살이 감나무 스스로 당분을 최대로 차오르게 만듭니다.
+          </div>
+          <div class="camera-note">Photo Note: 35mm · 새벽 안개 · 역광 자연광</div>
+        </div>
+      </div>
+
+      <!-- 02. 풍부한 햇살 -->
+      <div class="why-journal-card">
+        <div class="why-journal-img">
+          <img src="images/harvest_scene.jpg" alt="황금빛 가을 햇살 아래 감 수확">
+          <div class="why-stamp-tag">02. GOLDEN HOUR · 16:40</div>
+        </div>
+        <div class="why-journal-body">
+          <div class="why-journal-tit">풍부한 가을 일조량</div>
+          <div class="why-journal-desc">
+            남해안의 온화한 햇살을 듬뿍 받아 과육이 두텁고 단단하며, 떫은맛이 완벽히 달콤함으로 바뀝니다.
+          </div>
+          <div class="camera-note">Photo Note: 50mm · 황금빛 자연 채광</div>
+        </div>
+      </div>
+
+      <!-- 03. 청정 바람 -->
+      <div class="why-journal-card">
+        <div class="why-journal-img">
+          <div class="masking-tape tilt-right"></div>
+          <img src="images/persimmon_artisan.jpg" alt="섬진강과 지리산 청정 바람">
+          <div class="why-stamp-tag">03. VALLEY WIND · 14:15</div>
+        </div>
+        <div class="why-journal-body">
+          <div class="why-journal-tit">섬진강 청정 바람</div>
+          <div class="why-journal-desc">
+            산과 강이 만나는 맑고 습도 낮은 계곡 바람이 곰팡이 없이 깨끗하고 투명하게 감을 말려줍니다.
+          </div>
+          <div class="camera-note">Photo Note: 덕장 바람 · 맑은 공기감</div>
+        </div>
+      </div>
+
+      <!-- 04. 자연건조 과육 -->
+      <div class="why-journal-card">
+        <div class="why-journal-img">
+          <img src="images/persimmon_texture.jpg" alt="48일간 자연 숙성된 감말랭이 과육">
+          <div class="why-stamp-tag">04. NATURAL DRY · 48 DAYS</div>
+        </div>
+        <div class="why-journal-body">
+          <div class="why-journal-tit">48일간의 덕장 건조</div>
+          <div class="why-journal-desc">
+            인공 열풍기로 서두르지 않고, 지리산 바람에 48일 동안 천천히 숙성하여 영양과 풍미를 지킵니다.
+          </div>
+          <div class="camera-note">Photo Note: 전통 덕장 · 자연 숙성 과육</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================
+       03. TRUST & NUMBERS
+       ===================================== -->
+  <div class="sec hanji">
+    <div class="journal-vol text-center">HONEST PROMISE & TRUST</div>
+    <div class="journal-tit f-title text-center">정직하게 빚은 안심의 약속</div>
+    <div class="journal-sub text-center">
+      자연의 순리대로 키우고, 엄격한 위생 기준으로 정성을 다합니다.
+    </div>
+
+    <div class="trust-paper-wrap">
+      <div class="trust-letter-card">
+        <div class="trust-letter-stamp-area">
+          <div class="trust-seal-item">
+            <div class="seal-badge">HACCP<br>위생인증</div>
+            <div class="seal-info">
+              <h4>식약처 HACCP 인증</h4>
+              <p>먼지 한 톨 없는 무균 클린룸 가공</p>
+            </div>
+          </div>
+
+          <div class="trust-seal-item">
+            <div class="seal-badge green">무농약<br>품질인증</div>
+            <div class="seal-info">
+              <h4>무농약 친환경 재배</h4>
+              <p>합성농약·화학비료 0% 지리산 감</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="trust-letter-body">
+          "내 가족의 식탁에 올린다는 마음으로 <strong>합성 농약 없이</strong> 정직하게 길렀습니다.<br>
+          식약처 인증 무균 시설에서 정밀 이물 검사까지 통과한 <strong>가장 안전하고 순수한 감말랭이</strong>를 약속드립니다."
+        </div>
+      </div>
+    </div>
+
+    <div class="fact-warm-grid">
+      <div class="fact-warm-box">
+        <div class="fact-w-icon">TIME</div>
+        <div class="fact-w-val">48<span>일</span></div>
+        <div class="fact-w-desc">바람과 햇살의 시간</div>
+      </div>
+      <div class="fact-warm-box">
+        <div class="fact-w-icon">ORIGIN</div>
+        <div class="fact-w-val">100<span>%</span></div>
+        <div class="fact-w-desc">지리산 하동 둥시감</div>
+      </div>
+      <div class="fact-warm-box">
+        <div class="fact-w-icon">PURE</div>
+        <div class="fact-w-val">0<span>%</span></div>
+        <div class="fact-w-desc">농약·설탕·방부제</div>
+      </div>
+      <div class="fact-warm-box">
+        <div class="fact-w-icon">CLEAN</div>
+        <div class="fact-w-val">HACCP</div>
+        <div class="fact-w-desc">식약처 안전관리인증</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================
+       04. PRICE & HAND JOURNEY
+       ===================================== -->
+  <div class="sec white">
+    <div class="journal-header">
+      <div class="journal-vol">CHAPTER 02 · CRAFTSMANSHIP</div>
+      <div class="journal-tit f-title">비싼 것이 아니라, 손길이 들어갔습니다</div>
+      <div class="journal-sub">
+        단 한 봉지의 감말랭이를 위해 거치는 5단계 손길의 여정
+      </div>
+    </div>
+
+    <div class="story-journey-wrap">
+      <div class="story-card-track">
+        <div class="story-step-card">
+          <div class="story-step-no">STEP 01</div>
+          <div class="story-step-tit">생감 10개 선별</div>
+          <div class="story-step-txt">첫서리 맞은 하동 완숙감을 하나씩 손으로 고릅니다</div>
+        </div>
+
+        <div class="story-step-card">
+          <div class="story-step-no">STEP 02</div>
+          <div class="story-step-tit">수작업 박피</div>
+          <div class="story-step-txt">과육 상처 없이 정성스레 칼로 껍질을 깎아냅니다</div>
+        </div>
+
+        <div class="story-step-card">
+          <div class="story-step-no">STEP 03</div>
+          <div class="story-step-tit">48일 덕장건조</div>
+          <div class="story-step-txt">지리산 계곡 바람과 가을 햇살에 걸어둡니다</div>
+        </div>
+
+        <div class="story-step-card">
+          <div class="story-step-no">STEP 04</div>
+          <div class="story-step-tit">매일 손 마사지</div>
+          <div class="story-step-txt">속살까지 젤리처럼 부드럽도록 매일 주물러줍니다</div>
+        </div>
+
+        <div class="story-step-card final">
+          <div class="story-step-no">STEP 05</div>
+          <div class="story-step-tit c-orange">완제품 1봉</div>
+          <div class="story-step-txt">자연의 단맛이 완벽히 응축된 보석 같은 한 봉지</div>
+        </div>
+      </div>
+
+      <div class="journey-hand-quote">
+        <div class="txt">
+          "기계로 하루 만에 바짝 구워내지 않고, 48일간 온 정성으로 보살피기에 더 많은 시간과 손길이 깃듭니다."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================
+       05. VISUAL COMPARISON
+       ===================================== -->
+  <div class="sec hanji">
+    <div class="journal-header">
+      <div class="journal-vol">CHAPTER 03 · COMPARISON</div>
+      <div class="journal-tit f-title">비교해보면 차이가 느껴집니다</div>
+      <div class="journal-sub">
+        눈속임 없이 사진과 과정으로 정직하게 보여드립니다.
+      </div>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-tag">시중 일반 열풍건조</div>
+        <div class="compare-tit">빠르게 구워낸 감말랭이</div>
+        <div class="compare-img">
+          <img src="images/persimmon_haccp.jpg" alt="일반 기계 건조 시설">
+        </div>
+        <ul class="compare-points">
+          <li><span>건조 방식:</span> 기계 열풍기로 1~2일 급속 건조</li>
+          <li><span>식감:</span> 겉과 속이 모두 다소 질기고 딱딱함</li>
+          <li><span>원재료:</span> 여러 산지 혼합 감 사용 가능성</li>
+          <li><span>농약 여부:</span> 일반 관행 재배 농산물</li>
+        </ul>
+      </div>
+
+      <div class="compare-card ours">
+        <div class="compare-tag">지리산 하동 100% 자연건조</div>
+        <div class="compare-tit">48일간 빚은 자연의 꿀맛</div>
+        <div class="compare-img">
+          <img src="images/persimmon_artisan.jpg" alt="하동 전통 덕장 자연 건조 장인의 손길">
+        </div>
+        <ul class="compare-points">
+          <li><span>건조 방식:</span> 지리산 맑은 바람에 48일 자연 숙성</li>
+          <li><span>식감:</span> 겉은 쫄깃, 속은 꿀처럼 촉촉한 젤리</li>
+          <li><span>원재료:</span> 100% 경남 하동 무농약 인증 감</li>
+          <li><span>농약 여부:</span> 합성농약 0% 무농약 안심 재배</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================
+       06. 48-DAY JOURNEY
+       ===================================== -->
+  <div class="sec white">
+    <div class="journal-header">
+      <div class="journal-vol">CHAPTER 04 · TIME & TRANSFORMATION</div>
+      <div class="journal-tit f-title">48일 동안, 감은 이렇게 깊어집니다</div>
+      <div class="journal-sub">
+        바람과 햇살을 받으며 오렌지빛에서 달콤한 꿀빛으로 변해가는 기록
+      </div>
+      <div class="hand-memo-line">"오늘도 아침 바람 맞으며 하나씩 정성껏 뒤집었습니다."</div>
+    </div>
+
+    <div class="diary-journey-grid">
+      <div class="diary-polaroid-item">
+        <div class="diary-tone-pill">DAY 01</div>
+        <div class="diary-tone-circle tone-1"></div>
+        <div class="diary-stage-tit">수확과 박피</div>
+        <div class="diary-stage-desc">단단한 주황빛 생감을 정성껏 깎아 덕장에 겁니다.</div>
+        <div class="camera-note" style="margin-top:8px;">[생감 과육]</div>
+      </div>
+
+      <div class="diary-polaroid-item">
+        <div class="diary-tone-pill">DAY 10</div>
+        <div class="diary-tone-circle tone-2"></div>
+        <div class="diary-stage-tit">바람맞이</div>
+        <div class="diary-stage-desc">청정 바람에 겉면 수분이 서서히 마르기 시작합니다.</div>
+        <div class="camera-note" style="margin-top:8px;">[표면 건조]</div>
+      </div>
+
+      <div class="diary-polaroid-item">
+        <div class="diary-tone-pill">DAY 20</div>
+        <div class="diary-tone-circle tone-3"></div>
+        <div class="diary-stage-tit">당도 응축</div>
+        <div class="diary-stage-desc">수분이 빠지며 감 고유의 꿀빛 당도가 속으로 모여듭니다.</div>
+        <div class="camera-note" style="margin-top:8px;">[호박빛 숙성]</div>
+      </div>
+
+      <div class="diary-polaroid-item">
+        <div class="diary-tone-pill">DAY 35</div>
+        <div class="diary-tone-circle tone-4"></div>
+        <div class="diary-stage-tit">손길의 숙성</div>
+        <div class="diary-stage-desc">매일 손으로 주물러 속살이 젤리처럼 촉촉해집니다.</div>
+        <div class="camera-note" style="margin-top:8px;">[손 마사지]</div>
+      </div>
+
+      <div class="diary-polaroid-item highlight">
+        <div class="diary-tone-pill">DAY 48</div>
+        <div class="diary-tone-circle tone-5"></div>
+        <div class="diary-stage-tit c-orange">단맛의 완성</div>
+        <div class="diary-stage-desc">천연 당분(하얀 분)이 피어나며 극상의 쫀득함 완성!</div>
+        <div class="camera-note" style="margin-top:8px;">[천연 당분꽃]</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================
+       07. PRODUCER LETTER
+       ===================================== -->
+  <div class="sec hanji">
+    <div class="letter-frame">
+      <div class="letter-photo">
+        <div class="masking-tape corner-left"></div>
+        <img src="images/farmer_portrait.jpg" alt="하동 농부 김형석">
+      </div>
+      <div class="letter-body">
+        <div class="photo-date-stamp">FARMER'S AUTUMN LETTER · 2026</div>
+        <div class="letter-author-name">하동 농부, 김형석</div>
+        <div class="letter-p">
+          "빨리 말려 많이 팔려고 기계를 쓰지 않습니다.<br><br>
+          바람이 말려줄 때까지 기다리는 것이 감에 대한 예의이고,<br>
+          제 손주에게 먹인다는 마음으로 농약 없이 30년 동안 하동에서 감을 키워왔습니다.<br>
+          가을 햇살이 담긴 정직한 달콤함을 식탁에 올립니다."
+        </div>
+        <div class="letter-handwriting">
+          "손주도 먹는 감이라, 한 톨의 거짓도 없습니다."
+        </div>
+        <div class="letter-stamp">경남 하동 직인</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================
+       08. [개편 완료] WORK JOURNAL (따뜻한 타임라인 다이어리)
+       ===================================== -->
+  <div class="sec white">
+    <div class="journal-header">
+      <div class="journal-vol">CHAPTER 05 · WORK JOURNAL</div>
+      <div class="journal-tit f-title">정직한 48일의 작업 일지</div>
+      <div class="journal-sub">
+        기계 대신 농부의 손과 시간으로 빚어낸 5가지 정직한 원칙
+      </div>
+      <div class="hand-memo-line">"서두르지 않고 매일 정성을 다해 살핍니다."</div>
+    </div>
+
+    <div style="position:relative; border-radius: 8px; overflow: hidden; margin-bottom: 30px; border: 1px solid var(--border-soft);">
+      <div class="masking-tape tilt-left"></div>
+      <img src="images/harvest_scene.jpg" alt="가을 첫서리 맞은 하동 감 수확 현장">
+    </div>
+
+    <!-- 따뜻한 아날로그 타임라인 다이어리 -->
+    <div class="process-timeline-wrap">
+      
+      <!-- 01 -->
+      <div class="timeline-entry">
+        <div class="timeline-node">
+          <div class="node-num">01</div>
+          <div class="node-sub">수확</div>
+        </div>
+        <div class="timeline-body-card">
+          <div class="timeline-header-row">
+            <div class="timeline-step-title">가을 첫서리 맞은 완숙 감만 골라냅니다</div>
+            <div class="timeline-stage-tag">STAGE 01 · 선별 수확</div>
+          </div>
+          <div class="timeline-step-desc">
+            지리산 고지대에서 첫서리를 맞고 나무 위에서 완숙되어 당도가 최고조에 오른 무농약 하동 둥시감만을 엄선합니다.
+          </div>
+          <span class="timeline-hand-memo">"덜 익은 감은 절대 따지 않고, 가지 끝까지 붉게 익은 것만 고릅니다."</span>
+        </div>
+      </div>
+
+      <!-- 02 -->
+      <div class="timeline-entry">
+        <div class="timeline-node">
+          <div class="node-num">02</div>
+          <div class="node-sub">박피</div>
+        </div>
+        <div class="timeline-body-card">
+          <div class="timeline-header-row">
+            <div class="timeline-step-title">과육이 다치지 않게 칼끝으로 얇게 깎아냅니다</div>
+            <div class="timeline-stage-tag">STAGE 02 · 정밀 박피</div>
+          </div>
+          <div class="timeline-step-desc">
+            달콤한 과육 손실을 막기 위해 기계로 깎아내지 않고, 숙련된 손길로 겉껍질만 얇고 균일하게 수작업으로 손질합니다.
+          </div>
+          <span class="timeline-hand-memo">"과육에 작은 상처 하나 나지 않도록 칼끝에 온 신경을 집중합니다."</span>
+        </div>
+      </div>
+
+      <!-- 03 -->
+      <div class="timeline-entry">
+        <div class="timeline-node">
+          <div class="node-num">03</div>
+          <div class="node-sub">건조</div>
+        </div>
+        <div class="timeline-body-card">
+          <div class="timeline-header-row">
+            <div class="timeline-step-title">지리산 계곡 바람과 햇살에 48일간 걸어둡니다</div>
+            <div class="timeline-stage-tag">STAGE 03 · 자연 건조</div>
+          </div>
+          <div class="timeline-step-desc">
+            인공 열풍기를 일절 쓰지 않고, 해발 500m 지리산 청정 계곡 바람과 따뜻한 가을 햇살에 걸어두고 48일 동안 천천히 숙성합니다.
+          </div>
+          <span class="timeline-hand-memo">"바람이 말려줄 때까지 기다리는 것이 감에 대한 농부의 예의입니다."</span>
+        </div>
+      </div>
+
+      <!-- 04 -->
+      <div class="timeline-entry">
+        <div class="timeline-node">
+          <div class="node-num">04</div>
+          <div class="node-sub">숙성</div>
+        </div>
+        <div class="timeline-body-card">
+          <div class="timeline-header-row">
+            <div class="timeline-step-title">젤리처럼 촉촉해지도록 매일 손으로 주물러줍니다</div>
+            <div class="timeline-stage-tag">STAGE 04 · 손 마사지</div>
+          </div>
+          <div class="timeline-step-desc">
+            건조 기간 동안 감을 하나하나 손으로 정성껏 주물러 속살의 당분을 고르게 퍼뜨리고 찰진 젤리 식감을 완성합니다.
+          </div>
+          <span class="timeline-hand-memo">"손길이 닿은 만큼 감은 속살까지 부드럽고 쫀득해집니다."</span>
+        </div>
+      </div>
+
+      <!-- 05 -->
+      <div class="timeline-entry">
+        <div class="timeline-node" style="border-color: var(--c-brown);">
+          <div class="node-num" style="color: var(--c-brown);">05</div>
+          <div class="node-sub">검사</div>
+        </div>
+        <div class="timeline-body-card" style="background: #fffdfa; border-color: var(--c-orange);">
+          <div class="timeline-header-row">
+            <div class="timeline-step-title">이물질 하나 없도록 식약처 HACCP 무균실에서 전수 검사합니다</div>
+            <div class="timeline-stage-tag" style="color: var(--c-orange);">STAGE 05 · 안심 포장</div>
+          </div>
+          <div class="timeline-step-desc">
+            자연 건조를 마친 감말랭이는 최신 광학 선별기와 금속 검출기를 거쳐 먼지와 이물질을 완벽히 걸러낸 후 위생 포장됩니다.
+          </div>
+          <span class="timeline-hand-memo">"우리 아이 입에 들어갈 간식이기에 마지막 포장까지 깐깐하게 검사합니다."</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =====================================
+       09. TEXTURE & POLAROID STACK
+       ===================================== -->
+  <div class="sec hanji">
+    <div class="journal-header">
+      <div class="journal-vol">CHAPTER 06 · TEXTURE</div>
+      <div class="journal-tit f-title">눈으로 느껴지는 쫀득한 온기</div>
+      <div class="journal-sub">
+        겉은 쫄깃하고, 속은 꿀처럼 촉촉하게 늘어나는 천연 과육
+      </div>
+      <div class="hand-memo-line">"설탕 한 톨 넣지 않은 자연의 꿀맛입니다."</div>
+    </div>
+
+    <div class="texture-editorial-wrap">
+      <div class="texture-main-pic">
+        <img src="images/persimmon_texture.jpg" alt="감말랭이 쫀득한 과육 단면">
+        <div class="texture-quote-bar">
+          <div class="texture-main-phrase">"한 입 베어 물면, 가을이 시작됩니다."</div>
+          <div class="texture-sub-phrase">설탕 없이 피어난 천연 당분(시설)의 그윽한 풍미</div>
+        </div>
+      </div>
+
+      <div class="texture-polaroids-stack">
+        <div class="tex-stack-card card-1">
+          <div class="masking-tape corner-left" style="width:60px; height:18px; top:-8px;"></div>
+          <img src="images/dessert_pairing.jpg" alt="요거트와 감말랭이">
+          <div class="tex-stack-cap">달콤한 토핑</div>
+        </div>
+        <div class="tex-stack-card card-2">
+          <div class="masking-tape corner-right" style="width:60px; height:18px; top:-8px;"></div>
+          <img src="images/tea_pairing.jpg" alt="차와 함께">
+          <div class="tex-stack-cap">따뜻한 차 한 잔</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tex-memo-grid">
+      <div class="tex-memo-card">
+        <div class="tex-memo-tit">표면의 하얀 분 (천연 당분)</div>
+        <div class="tex-memo-txt">인공 당분이 아닌, 감 본연의 포도당이 자연스럽게 꽃처럼 피어난 최상급 감의 증거입니다.</div>
+      </div>
+      <div class="tex-memo-card">
+        <div class="tex-memo-tit">치아에 붙지 않는 찰기</div>
+        <div class="tex-memo-txt">적정 수분율을 유지하여 이에 달라붙지 않고 부드럽게 씹히는 고급스러운 식감입니다.</div>
+      </div>
+      <div class="tex-memo-card">
+        <div class="tex-memo-tit">입안 가득 은은한 감 향</div>
+        <div class="tex-memo-txt">자극적인 인공 단맛이 아닌, 씹을수록 깊어지는 지리산 감 특유의 은은한 향입니다.</div>
+      </div>
+      <div class="tex-memo-card">
+        <div class="tex-memo-tit">씨 없는 편안함</div>
+        <div class="tex-memo-txt">남녀노소 누구나 씨를 뱉어내는 번거로움 없이 편안하게 바로 드실 수 있습니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================
+       10. HONEST NOTE
+       ===================================== -->
+  <div class="sec white">
+    <div class="honest-kraft-card">
+      <div class="honest-kraft-head">
+        <div class="photo-date-stamp">HARVEST NOTE · NATURAL EVIDENCE</div>
+        <div class="honest-kraft-tit">"모양과 색은 조금씩 다를 수 있습니다"</div>
+        <div class="honest-kraft-sub">자연 그대로 정직하게 말렸다는 가장 확실한 증거</div>
+      </div>
+
+      <div class="honest-story-list">
+        <div class="honest-story-item">
+          <div class="honest-item-q">Q. 왜 크기와 모양이 조금씩 다른가요?</div>
+          <div class="honest-item-a">공산품처럼 규격화된 약품 처리를 하지 않고, 감나무에 달린 자연 그대로 수확해 깎았기 때문입니다.</div>
+          <span class="honest-item-hand">"자연 그대로라서 제각각이지만 맛은 하나같이 꿀맛입니다."</span>
+        </div>
+
+        <div class="honest-story-item">
+          <div class="honest-item-q">Q. 감마다 주황빛과 꿀빛 색상이 달라요.</div>
+          <div class="honest-item-a">지리산 햇살과 바람을 듬뿍 받은 위치에 따라 자연스럽게 깊어지는 아름다운 숙성의 차이입니다.</div>
+          <span class="honest-item-hand">"가을 햇살을 더 많이 머금을수록 짙은 호박빛이 돕니다."</span>
+        </div>
+
+        <div class="honest-story-item">
+          <div class="honest-item-q">Q. 겉면의 하얀 가루는 곰팡이인가요?</div>
+          <div class="honest-item-a">절대 곰팡이가 아닙니다. 감 속의 천연 당분이 겉으로 뽀얗게 올라온 '시설(柿雪)'이며 꿀맛의 상징입니다.</div>
+          <span class="honest-item-hand">"가장 달고 맛있게 잘 말랐다는 자연의 선물입니다."</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================
+       11. LIFESTYLE
+       ===================================== -->
+  <div class="sec hanji">
+    <div class="journal-header">
+      <div class="journal-vol">CHAPTER 07 · MOMENTS</div>
+      <div class="journal-tit f-title">일상 속에서 만나는 가을의 온기</div>
+      <div class="journal-sub">
+        온 가족이 함께 나누는 건강하고 다정한 순간들
+      </div>
+    </div>
+
+    <div class="life-photo-grid">
+      <div class="life-polaroid">
+        <div class="masking-tape tilt-left" style="width:70px; height:20px; top:-9px;"></div>
+        <div class="life-polaroid-img">
+          <img src="images/kid_snack.jpg" alt="아이 영양 간식">
+        </div>
+        <div class="life-polaroid-caption">우리 아이 안심 간식</div>
+      </div>
+
+      <div class="life-polaroid">
+        <div class="life-polaroid-img">
+          <img src="images/outdoor_snack.jpg" alt="등산 나들이 영양식">
+        </div>
+        <div class="life-polaroid-caption">등산·나들이 에너지 보충</div>
+      </div>
+
+      <div class="life-polaroid">
+        <div class="masking-tape tilt-right" style="width:70px; height:20px; top:-9px;"></div>
+        <div class="life-polaroid-img">
+          <img src="images/tea_pairing.jpg" alt="전통 찻상 다과">
+        </div>
+        <div class="life-polaroid-caption">손님을 위한 품격 다과상</div>
+      </div>
+
+      <div class="life-polaroid">
+        <div class="life-polaroid-img">
+          <img src="images/dessert_pairing.jpg" alt="그릭 요거트 토핑">
+        </div>
+        <div class="life-polaroid-caption">그릭요거트·샐러드 토핑</div>
+      </div>
+
+      <div class="life-polaroid">
+        <div class="masking-tape tilt-left" style="width:70px; height:20px; top:-9px;"></div>
+        <div class="life-polaroid-img">
+          <img src="images/gift_package.jpg" alt="명절 선물세트">
+        </div>
+        <div class="life-polaroid-caption">마음을 전하는 명절 선물</div>
+      </div>
+
+      <div class="life-polaroid">
+        <div class="life-polaroid-img">
+          <img src="images/hero_persimmon.jpg" alt="나른한 오후의 티타임">
+        </div>
+        <div class="life-polaroid-caption">오후의 달콤한 티타임</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================
+       12. REVIEWS
+       ===================================== -->
+  <div class="sec white">
+    <div class="journal-header">
+      <div class="journal-vol">CHAPTER 08 · CUSTOMER STORIES</div>
+      <div class="journal-tit f-title">식탁에서 전해온 따뜻한 후기</div>
+      <div class="journal-sub">
+        실제 구매 고객님들이 들려주신 감동의 기록
+      </div>
+    </div>
+
+    <div class="reviews-journal-list">
+      <div class="review-paper-card">
+        <div class="review-paper-img">
+          <img src="images/persimmon_texture.jpg" alt="후기 사진 1">
+        </div>
+        <div class="review-paper-content">
+          <div class="review-paper-header">
+            <div class="review-stars-gold">★★★★★</div>
+            <div class="review-badge-soft">베스트 리뷰</div>
+          </div>
+          <div class="review-paper-quote">
+            "시중 마트 감말랭이랑은 정말 차원이 달라요. 겉은 쫄깃한데 속은 꿀처럼 촉촉하고 부드럽습니다. 단맛이 인공적이지 않고 깊어서 부모님이 너무 좋아하셨어요."
+          </div>
+          <div class="review-paper-meta">정*진 고객님 · 500g 가정용 구매 · 재구매 (2026.11.08)</div>
+        </div>
+      </div>
+
+      <div class="review-paper-card">
+        <div class="review-paper-img">
+          <img src="images/kid_snack.jpg" alt="후기 사진 2">
+        </div>
+        <div class="review-paper-content">
+          <div class="review-paper-header">
+            <div class="review-stars-gold">★★★★★</div>
+            <div class="review-badge-soft">아이 안심 간식</div>
+          </div>
+          <div class="review-paper-quote">
+            "5살 아이 간식으로 젤리 대신 주려고 샀는데, 설탕이 전혀 안 들어갔는데도 어쩜 이렇게 달고 쫀득한지 아이가 매일 찾아요. 씨도 없어서 안심하고 먹입니다."
+          </div>
+          <div class="review-paper-meta">김*은 고객님 · 500g 가정용 구매 (2026.11.12)</div>
+        </div>
+      </div>
+
+      <div class="review-paper-card">
+        <div class="review-paper-img">
+          <img src="images/gift_package.jpg" alt="후기 사진 3">
+        </div>
+        <div class="review-paper-content">
+          <div class="review-paper-header">
+            <div class="review-stars-gold">★★★★★</div>
+            <div class="review-badge-soft">선물 추천</div>
+          </div>
+          <div class="review-paper-quote">
+            "명절 선물로 양가 부모님께 보내드렸는데 칭찬을 정말 많이 들었습니다. 포장 상자도 정갈하고 하얀 분이 예쁘게 올라와 있어서 아주 품격 있어 보입니다."
+          </div>
+          <div class="review-paper-meta">이*훈 고객님 · 1kg 선물세트 구매 (2026.11.15)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================
+       13. OPTION GUIDE
+       ===================================== -->
+  <div class="sec hanji" id="opt-sec">
+    <div class="journal-header">
+      <div class="journal-vol">CHAPTER 09 · OPTIONS</div>
+      <div class="journal-tit f-title">용도에 맞게 선택하세요</div>
+      <div class="journal-sub">
+        어떤 구성을 선택하셔도 지리산 하동 100% 최상급 감말랭이입니다.
+      </div>
+    </div>
+
+    <div class="opt-journal-grid">
+      <div class="opt-journal-card">
+        <div class="opt-j-badge">실속 체험</div>
+        <div class="opt-j-weight">200g</div>
+        <div class="opt-j-title">1~2인 가구 영양 간식</div>
+        <div class="opt-j-desc">혼자서 가볍게 맛보거나 출근길·운동 간편 간식으로 알맞은 소포장 용량입니다.</div>
+      </div>
+
+      <div class="opt-journal-card best">
+        <div class="opt-j-badge">BEST 추천</div>
+        <div class="opt-j-weight c-orange">500g</div>
+        <div class="opt-j-title">온 가족 넉넉한 간식</div>
+        <div class="opt-j-desc">냉동실에 두고 온 가족이 넉넉하게 나누어 드시기에 가장 인기 있는 구성입니다.</div>
+      </div>
+
+      <div class="opt-journal-card">
+        <div class="opt-j-badge">정갈한 선물</div>
+        <div class="opt-j-weight c-gold">1kg</div>
+        <div class="opt-j-title">고급 지함 선물세트 포장</div>
+        <div class="opt-j-desc">전용 지함 상자와 리본 포장으로 명절 및 감사의 마음을 전하기에 제격입니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================
+       14. FAQ & INFO
+       ===================================== -->
+  <div class="sec white">
+    <div class="journal-vol text-center">SAFETY & FAQ</div>
+    <div class="journal-tit f-title text-center" style="margin-bottom: 20px;">자주 묻는 질문</div>
+
+    <div class="faq-journal-list">
+      <div class="faq-journal-item">
+        <div class="faq-j-q">Q. 보관은 어떻게 해야 가장 신선한가요?</div>
+        <div class="faq-j-a">방부제가 전혀 들어있지 않은 자연식품이므로 수령 즉시 **냉동 보관(-18℃ 이하)** 하시는 것을 권장합니다. 드시기 10~15분 전 실온에 꺼내두시면 본연의 쫀득하고 촉촉한 식감이 그대로 살아납니다.</div>
+      </div>
+
+      <div class="faq-journal-item">
+        <div class="faq-j-q">Q. 유통기한은 얼마나 되나요?</div>
+        <div class="faq-j-a">제조(포장)일로부터 냉동 보관 시 **6개월**입니다. 개봉 후에는 밀봉하여 가급적 빠르게 드시는 것이 좋습니다.</div>
+      </div>
+    </div>
+
+    <table class="info-journal-table">
+      <tr><th>제품명</th><td>지리산 하동 감말랭이</td></tr>
+      <tr><th>식품의 유형</th><td>건과류 (자연건시)</td></tr>
+      <tr><th>원재료명 및 함량</th><td>감 100% (국내산 경남 하동 무농약)</td></tr>
+      <tr><th>내용량</th><td>200g / 500g / 1kg (옵션별 상이)</td></tr>
+      <tr><th>생산자 및 소재지</th><td>하동지리산감영농조합법인 (경남 하동군 악양면)</td></tr>
+      <tr><th>보관방법</th><td>수령 즉시 냉동보관 (영하 18℃ 이하)</td></tr>
+      <tr><th>소비자상담번호</th><td>055-883-XXXX (평일 09:00 ~ 18:00)</td></tr>
+    </table>
+  </div>
+
+  <!-- =====================================
+       15. CLOSING LETTER & CTA
+       ===================================== -->
+  <div class="closing-sec">
+    <div class="closing-letter-card">
+      
+      <div class="closing-sunset-img">
+        <div class="masking-tape tilt-left"></div>
+        <img src="images/hadong_orchard.jpg" alt="노을 진 지리산 하동 감나무 과수원">
+      </div>
+
+      <div class="closing-vol">CLOSING LETTER · AUTUMN 2026</div>
+      <div class="closing-tit f-title">
+        가을의 온기를<br>식탁에 전합니다
+      </div>
+      <div class="closing-txt">
+        지리산 맑은 바람과 따뜻한 가을 햇살,<br>
+        그리고 30년 농부의 정성 어린 기다림으로 빚은<br>
+        하동 감말랭이를 지금 만나보세요.
+      </div>
+
+      <div>
+        <a href="#opt-sec" class="btn-journal-buy">지금 만나보기</a>
+      </div>
+      <div class="closing-notice">
+        ※ 당해 연도 한정 수확 물량으로 조기 마감될 수 있습니다.
+      </div>
+
+      <div class="closing-sign-box">
+        <div class="closing-hand">
+          "올해도 좋은 감으로 넉넉한 기쁨을 드리겠습니다.<br>
+          내년에도 정성 다해 찾아뵙겠습니다. 감사합니다."
+        </div>
+        <div style="font-family: var(--font-serif); font-size: 15px; color: var(--c-brown); margin-top: 8px;">
+          - 하동 농부 김형석 올림
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  document.getElementById('bm').onclick = function() {
+    this.classList.add('on');
+    document.getElementById('bp').classList.remove('on');
+    document.getElementById('pg').classList.remove('wide');
+  };
+  document.getElementById('bp').onclick = function() {
+    this.classList.add('on');
+    document.getElementById('bm').classList.remove('on');
+    document.getElementById('pg').classList.add('wide');
+  };
+</script>
+
+</body>
+</html>
